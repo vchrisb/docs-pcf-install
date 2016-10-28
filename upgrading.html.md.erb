@@ -1,0 +1,30 @@
+---
+title: Upgrading Pivotal Cloud Foundry
+---
+
+This topic provides information and guidance for operators who want to upgrade their Pivotal Cloud Foundry (PCF) deployment.
+
+#### Definition: Upgrading PCF
+
+Upgrading a PCF deployment includes installing the new major versions of:
+
+* Ops Manager
+* Elastic Runtime, and
+* all other product tiles on your current deployment that are compatible with the new versions of Ops Manager and Elastic Runtime.
+
+<p class="note"><strong>Note</strong>: You must upgrade to PCF v1.8 in sequential order from your current version. For example, if your deployment uses Ops Manager v1.6, you must first upgrade to v1.7 using the 1.7 version of the upgrade document.</p>
+
+#### Platform Availability during an Upgrade
+
+* The apps in your deployment continue to run during the upgrade. 
+* You cannot write to your deployment or make changes to apps during the upgrade.
+
+#### How to Upgrade
+
+Follow the procedures in the topics below to upgrade your PCF deployment: 
+
+<p class="note"><strong>Note</strong>: Read the Known Issues sections of the <a href="../pcf-release-notes/index.html">Release Notes</a> before getting started.</p>
+
+1. <a href="./prepare-to-upgrade.html" class="subnav">Preparing to Upgrade</a>
+
+2. <a href="./upgrade-products.html" class="subnav">Upgrading Ops Manager and Installed Products</a>

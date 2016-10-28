@@ -1,0 +1,197 @@
+---
+title: Upgrading Ops Manager and Installed Products
+---
+
+<style>
+    .note.warning {
+        background-color: #fdd;
+        border-color: #fbb
+    }
+
+    .note.warning:before {
+        color: #f99;
+     }
+</style>
+
+This topic describes how to install the new version of Ops Manager, Elastic Runtime, and other tiles in your deployment and complete the upgrade.
+
+<p class="note warning">
+<strong>WARNING: </strong> The <a href="./prepare-to-upgrade.html">Preparing to Upgrade</a> topic contains important guidelines that you must follow before beginning an upgrade to Ops Manager v1.8. Failure to follow these instructions may jeopardize your existing deployment data and cause your upgrade to fail.
+</p>
+
+
+## <a id="export"></a>Export your Installation
+
+Follow this procedure to export your current PCF installation with all of its assets, including the base VM images and necessary packages and references to the installation IP addresses.
+
+<table>
+	<tr>
+		<th>Step</th>
+		<th>Action</th>
+	</tr>
+	<tr>
+		<td>1</td>
+		<td>In your Ops Manager v1.7.x <b>Installation Dashboard</b>, click the gear icon and select <b>Export settings</b>.
+
+    		<%= image_tag("./images/upgrading/upgrade_to_1.8.png") %>
+
+    	<p class="note"><b>Note</b>: Some browsers do not provide feedback on the status of the export process and might appear to hang because of the large size of the export file.</p></td>
+	</tr>
+	<tr>
+		<td>2</td>
+		<td>If your operating system automatically unzips the exported installation, create a ZIP file of the unzipped export. 
+
+		<p class="note"><b>Note</b>: Do not start compressing at the "installation" folder level. Instead, start compressing at the level containing the <code>config.yml</code> file as shown in the image below.</p>
+
+		<%= image_tag("./images/upgrading/compress.png") %></td>
+	</tr>
+</table>
+
+## <a id="ops-man"></a>Upgrade Ops Manager
+
+Follow this procedure to create a new VM and install Ops Manager 1.8 based on your previous installation. 
+
+<table>
+	<tr>
+		<th>Step</th>
+		<th>Action</th>
+	</tr>
+	<tr>
+		<td>1</td>
+		<td>Download the Ops Manager VM Template v1.8.x from [Pivotal Network](https://network.pivotal.io/products/ops-manager).</td>
+	</tr>
+	<tr>
+		<td>2</td>
+		<td>Record the FQDN address of the existing Ops Manager VM.</td>
+	</tr>
+	<tr>
+		<td>3</td>
+		<td>To avoid conflicts, power off the existing Ops Manager VM.</td>
+	</tr>
+	<tr>
+		<td>4</td>
+		<td>Deploy the new Ops Manager VM by following the steps in one of these topics:
+		<ul>
+		<li> <a href="./cloudform-om-deploy.html">Launching an Ops Manager Director Instance on AWS</a> </li>
+		<li> <a href="./openstack-setup.html">Provisioning the OpenStack Infrastructure</a> </li>
+		<li> <a href="./deploying-vm.html">Deploying Operations Manager to vSphere</a> </li></ul></td>
+	</tr>
+	<tr>
+		<td>5</td>
+		<td>When redirected to the <b>Welcome to Ops Manager</b> page, select <b>Import Existing Installation</b>.
+		<br>
+    	<%= image_tag("./images/upgrading/welcome.png") %></td>
+	</tr>
+	<tr>
+		<td>6</td>
+		<td>When prompted, enter a Decryption Passphrase. Click <b>Choose File</b> and browse to the installation ZIP file exported in Step 1 above.
+		<br>
+   	 	<%= image_tag("./images/upgrading/decryption_passphrase.png") %></td>
+	</tr>
+	<tr>
+		<td>7</td>
+		<td> Click <b>Import</b>.
+
+		<p class="note"><strong>Note</strong>:
+		Some browsers do not provide feedback on the status of the import process, and might appear to hang.</p>
+		<br>
+
+		<b>Result</b>: A "Successfully imported installation" message appears upon completion.
+		<br>
+	    <%= image_tag("./images/upgrading/success.png") %>
+		</td>
+	</tr>
+</table>
+
+## <a id="ert"></a>Upgrade Elastic Runtime and Other Products
+
+<p class="note warning">
+<strong>WARNING: </strong> You must upgrade the products listed in the steps below before you click <strong>Apply Changes</strong>. You cannot complete your installation until you perform these upgrades. 
+</p>
+
+If you use any of the following products, you must upgrade them to the versions specified below:
+
+* Elastic Runtime v1.8.x
+* RabbitMQ v1.7.x
+* Single Sign-On Service v1.2.x
+* PCF Metrics v1.1.x
+
+<p class="note warning">
+<strong>WARNING: </strong> There is a known issue with the diego-bbs that can cause application downtime after upgrading from Elastic Runtime 1.7 to 1.8. Follow the instructions in the <a href="../pcf-release-notes/runtime-rn.html#upgrade-issue">Resolve Diego-BBS Issue when Upgrading from 1.7 to 1.8</a> section of the release notes before you upgrade Elastic Runtime.
+</p>
+
+<table>
+	<tr>
+		<th>Step</th>
+		<th>Action</th>
+	</tr>
+	<tr>
+		<td>1</td>
+		<td>Import the product file to your Ops Manager <b>Installation Dashboard</b>.</td>
+	</tr>
+	<tr>
+		<td>2</td>
+		<td>Hover over the product name in <b>Available Products</b> and click <b>Add</b>.</td>
+	</tr>
+	<tr>
+		<td>3</td>
+		<td>Click the newly added tile to review any configurable options.</td>
+	</tr>
+	<tr>
+		<td>4</td>
+		<td>Click the newly added tile to review any configurable options.</td>
+	</tr>
+	<tr>
+		<td>5</td>
+		<td>If you are using other service tiles, you can upgrade them following the same procedure. See the <a href="./upgrading-products.html" class="subnav">Upgrading Elastic Runtime and Other Pivotal Cloud Foundry Products</a> topic for more information.
+		</td>
+	</tr>
+</table>
+
+## <a id="complete"></a>Complete Installation
+
+Follow this procedure to complete the tile installations.
+
+<table>
+	<tr>
+		<th>Step</th>
+		<th>Action</th>
+	</tr>
+	<tr>
+		<td>1</td>
+		<td>Navigate to the Ops Manager <b>Installation Dashboard</b>.</td>
+	</tr>
+	<tr>
+		<td>2</td>
+		<td>Click <b>Apply Changes</b>. This immediately imports and applies upgrades to all tiles in a single transaction.</td>
+	</tr>
+	<tr>
+		<td>3</td>
+		<td>Click each service tile, select the <b>Status</b> tab, and confirm that all VMs appear and are in good health.</td>
+	</tr>
+	<tr>
+		<td>4</td>
+		<td>After confirming that the new installation functions correctly, remove the original (v1.7.x) Ops Manager VM. This step completes the upgrade to Ops Manager v1.8.</td>
+	</tr>
+</table>
+
+## Deprecate Old Jobs
+
+<table>
+	<tr>
+		<th></th>
+		<th></th>
+	</tr>
+	<tr>
+		<td></td>
+		<td></td>
+	</tr>
+	<tr>
+		<td></td>
+		<td></td>
+	</tr>
+	<tr>
+		<td></td>
+		<td></td>
+	</tr>
+</table>

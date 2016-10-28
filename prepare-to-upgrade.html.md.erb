@@ -1,0 +1,166 @@
+---
+title: Preparing to Upgrade
+---
+
+<p class="note"><strong>Note</strong>: This topic includes procedures that you must complete before upgrading a Pivotal Cloud Foundry (PCF) deployment.
+</p>
+
+## <a id="tiles"></a>Install Prerequisite Tile Versions and Remove Unsupported Tiles
+
+Follow this procedure to install the correct tile versions and remove any incompatible tiles before upgrading. 
+
+<table>
+  <tr>
+    <th>Step</th>
+    <th>Action</th> 
+  </tr>
+  <tr>
+    <td>1</td>
+    <td>For any of the following products that you use, upgrade to the specified versions using the procedure outlined in the <a href="http://docs.pivotal.io/pivotalcf/1-7/customizing/upgrading-products.html">Upgrading Elastic Runtime and Other Pivotal Cloud Foundry Products</a> topic.
+	    <table style="width:100%">
+		  <tr>
+		    <th>Product Tile</th>
+		    <th>Version</th> 
+		  </tr>
+		  <tr>
+		    <td>Elastic Runtime</td>
+		    <td>1.7.20</td> 
+		  </tr>
+		  <tr>
+		    <td>RabbitMQ&reg; for PCF</td>
+		    <td>1.6.5 or 1.6.6<sup>*</sup></td> 
+		  </tr>
+		  <tr>
+		    <td>Redis</td>
+		    <td>1.5.17</td> 
+		  </tr>
+		  <tr>
+		    <td>Service Broker for AWS</td>
+		    <td>0.13</td> 
+		  </tr>
+		  <tr>
+		    <td>Riak CS</td>
+		    <td>1.5.15</td> 
+		  </tr>
+		  <tr>
+		    <td>Push Notification</td>
+		    <td>1.6.2</td> 
+		  </tr>
+	  </table>
+
+	  	<br>
+		<sup>*</sup>To update RabbitMQ for PCF, see <a href="http://docs.pivotal.io/rabbitmq-cf/1-6-6/updating.html">Updating RabbitMQ for PCF</a>.
+  	</td>
+  </tr>
+  <tr>
+  	<td>2</td>
+  	<td>If your deployment contains any of the following unsupported products, remove the associated product tile.
+  		<table>
+  			<th>Product Tiles Incompatible with PCF 1.8</th>
+  			<tr> <td> App Distribution for PCF </td></tr>
+			<tr> <td> Data Sync for PCF </td></tr>
+			<tr> <td> Datastax Enterprise for PCF </td></tr>
+			<tr> <td> MongoDB for PCF </td></tr>
+			<tr> <td> Neo4J for PCF </td></tr>
+			<tr> <td> Pivotal HD</tr>
+			<tr> <td> Session State Caching Powered by GemFire for PCF </td></tr>
+  		</table>
+ 	</td>
+  </tr>
+  <tr>
+  	<td>3</td>
+  	<td>Remove any partner service tiles from your deployment that are incompatible with PCF v1.8. 
+	<p class="note"><b>Note</b>: See the partner documentation at http://docs.pivotal.io or contact the partner for information on compatibility with PCF v1.8.
+	</p></td>
+  </tr>
+</table>
+
+## <a id="configure"></a>Back up and Configure your Deployment
+
+Follow this procedure to back up and configure your deployment before upgrading.
+
+<table>
+	<tr>
+		<th>Step</th>
+		<th>Action</th>
+	</tr>
+	<tr>
+		<td>1</td>
+		<td>Back up all critical data prior to upgrading to Ops Manager v1.8. For example, to backup a v1.7 environment, follow the instructions in the v1.7 <a href="http://docs.pivotal.io/pivotalcf/1-7/customizing/backup-restore/backup-pcf.html">Backing Up Pivotal Cloud Foundry</a> topic. 
+
+	    <p class="note"><b>Note</b>: You do not need to backup the Apps Manager <code>console</code> database because it is deprecated in v1.8. </p></td>
+	</tr>
+	<tr>
+		<td>2</td>
+		<td>If you have disabled lifecycle errands for any installed product to reduce deployment time, Pivotal recommends that you re-enable these errands before upgrading. For more information, see the <a href="./add-delete.html#add-import">Adding and Deleting Products</a> topic.</td>
+	</tr>
+	<tr>
+		<td>3</td>
+		<td><%= partial 'check_disk_before_upgrade' %></td>
+	</tr>
+	<tr>
+		<td>4</td>
+		<td>Ensure that the VM Resurrector is disabled:
+		<br>
+			<table>
+				<tr>
+					<th>Step</th>
+					<th>Action</th>
+				</tr>
+				<tr>
+					<td>1</td>
+					<td>From your <b>Installation Dashboard</b>, select the <b>Ops Manager Director</b> tile.</td>
+				</tr>
+				<tr>
+					<td>2</td>
+					<td>Click <b>Director Config</b>.</td>
+				</tr>
+				<tr>
+					<td>3</td>
+					<td>Clear the <b>Enable VM resurrector plugin</b> checkbox.</td>
+				</tr>
+				<tr>
+					<td>4</td>
+					<td>Click <b>Save</b>.</td>
+				</tr>
+				<tr>
+					<td>5</td>
+					<td>Return to the </b>Installation Dashboard<b> and click <b>Apply Changes</b>.</td>
+				</tr>
+			</table>
+	</tr>
+</table>
+
+## <a id="healthcheck"></a>Check System Health
+
+Follow this procedure to confirm system health before proceeding to the upgrade topic.
+
+<table>
+	<tr>
+		<th>Step</th>
+		<th>Action</th>
+	</tr>
+	<tr>
+		<td>1</td>
+		<td>Run <code>bosh cloudcheck</code> to confirm that the VMs are healthy. For more information, see the <a href="./trouble-advanced.html#cck">BOSH Cloudcheck</a> topic.</td>
+	</tr>
+	<tr>
+		<td>2</td>
+		<td>Check the system health of installed products. In the <b>Installation Dashboard</b>, select the <b>Status</b> tab for each service tile. Confirm that all jobs are healthy.</td>
+	</tr>
+	<tr>
+		<td>3</td>
+		<td>(Optional) Check the logs for errors before proceeding with the upgrade. For more information, see the <a href="../devguide/deploy-apps/streaming-logs.html#view">Viewing Logs in the Command Line Interface</a> topic.</td>
+	</tr>
+	<tr>
+		<td>4</td>
+		<td>There should be no outstanding changes in Ops Manager or any other tile. All tiles should be green.
+		Click <b>Apply Changes</b> if necessary. After applying changes, click <b>Recent Install Logs</b> to confirm that the changes completed cleanly:<br>
+		<code>
+		Cleanup complete
+		{"type": "step\_finished", "id": "clean\_up\_bosh.cleaning\_up"}
+		Exited with 0.
+		</code>
+		</td>
+	</tr>
+</table>
