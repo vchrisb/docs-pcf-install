@@ -249,6 +249,19 @@ TCP Routing is available for users who want an alternative to HTTP. For more inf
 
 1. Manually remove the TCP routing domain. 
 
+### <a id="container-networking"></a>Container Networking
+
+Container Networking lets apps communicate with each other directly, without routing messages through the Gorouter, and using multiple protocols and ports.
+This feature is currently in beta and not supported. For more information, see [Container Networking](../adminguide/container-networking.html).
+
+To enable container networking, follow these steps:
+
+1. Select **Advanced Features**.
+  <%= image_tag("./ert-enable-c2c.png") %>
+   
+1. Click **Enable Container-to-Container Networking**.
+
+1. Click **Save**.
 ## <a id='errands'></a>Step 19: Configure Errands ##
 
 <%= partial 'errands' %>
